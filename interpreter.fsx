@@ -57,12 +57,7 @@ let go (row:bool[]) (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
                              |> Async.Parallel
                              |> Async.RunSynchronously
                              |> Seq.toArray
-            let str = toString newRow
-            let newRow = row |> getElements
-                             |> Seq.map (fun x -> async { return interpret x })
-                             |> Async.Parallel
-                             |> Async.RunSynchronously
-                             |> Seq.toArray
+
             match index with
             | 1 -> yield toString newRow
             | _ -> yield! goInternal newRow (index - 1)

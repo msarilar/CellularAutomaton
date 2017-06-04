@@ -1,9 +1,3 @@
-<Query Kind="FSharpProgram">
-  <NuGetReference>FSharp.Collections.ParallelSeq</NuGetReference>
-  <Namespace>FSharp.Collections.ParallelSeq</Namespace>
-  <Namespace>System.Linq</Namespace>
-</Query>
-
 (*
     LinqPad style for results:
     

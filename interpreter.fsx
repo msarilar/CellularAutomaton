@@ -18,8 +18,8 @@ let iterations = size / 2
 let getElements (row:bool[]) =
     let toTriplet index =
         match index with
-        | 0                         -> (false, row.[0], row.[1])
-        | x when x = row.Length - 1 -> (row.[x - 1], row.[x], false)
+        | 0                         -> (row.[0], row.[0], row.[1])
+        | x when x = row.Length - 1 -> (row.[x - 1], row.[x], row.[x])
         | _                         -> (row.[index - 1], row.[index], row.[index + 1])
 
     [0..(row.Length - 1)] |> Seq.map toTriplet
@@ -71,8 +71,8 @@ let build n =
                                 | _ -> false)
            |> Seq.toArray
 
+let rule = ruleNumber |> computeRule
 
-let rule = computeRule ruleNumber
 let arr = build size
 
 go arr rule iterations |> Seq.map (fun x -> x.Dump())

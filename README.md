@@ -9,3 +9,7 @@ http://blog.stephenwolfram.com/2017/06/oh-my-gosh-its-covered-in-rule-30s/
 ## Rule 129
 
 ![Rule 129](http://i.imgur.com/XK0layN.png)
+
+## Rule 22
+
+![Rule 129](http://i.imgur.com/W67czmz.png)

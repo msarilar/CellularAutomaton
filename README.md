@@ -12,7 +12,7 @@ http://blog.stephenwolfram.com/2017/06/oh-my-gosh-its-covered-in-rule-30s/
 
 ## Rule 109, random input
 
-![Rule 109, random input](http://i.imgur.com/E6PCoEf.png)
+![Rule 109, random input](http://i.imgur.com/xzDm1OU.png)
 
 ## Rule 129
 

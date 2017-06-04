@@ -12,7 +12,7 @@
 *)
 
 let size = 200
-let ruleNumber = 30
+let ruleNumber = 129
 let iterations = size / 2
 
 let getElements (row:bool[]) =
@@ -32,7 +32,7 @@ let computeRule number =
     [0..7] |> Seq.map toBool
            |> dict
 
-let toString (row:bool[]) =
+let toString row =
     let convert x =
         match x with
         | true -> "■"
@@ -44,11 +44,11 @@ let toString (row:bool[]) =
     String.Join("", strs)
     
 
-let go (row:bool[]) (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
+let go row (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
     let interpret triplet =
         ruleSet.Item(triplet)
 
-    let rec goInternal (row:bool[]) index =
+    let rec goInternal row index =
         seq {
             yield toString row
             

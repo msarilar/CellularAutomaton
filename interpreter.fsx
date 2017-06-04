@@ -11,8 +11,12 @@
     }
 *)
 
+let random = new Random()
+
 let size = 200
-let ruleNumber = 129
+let ruleNumber = random.Next(0, 256)
+ruleNumber.Dump();
+"".Dump();
 let iterations = size / 2
 
 let getElements (row:bool[]) =
@@ -50,7 +54,7 @@ let go row (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
 
     let rec goInternal row index =
         seq {
-            yield toString row
+            yield row
             
             let newRow = row |> getElements
                              |> Seq.map (fun x -> async { return interpret x })
@@ -59,22 +63,22 @@ let go row (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
                              |> Seq.toArray
 
             match index with
-            | 1 -> yield toString newRow
+            | 1 -> yield newRow
             | _ -> yield! goInternal newRow (index - 1)
         }
         
     goInternal row step
 
 let build n =
-    [0..n] |> Seq.map (fun x -> match x with
-                                | x when x = n / 2 -> true
+    [0..n] |> Seq.map (fun x -> match random.Next(0, 100) with
+                                | x when x >= 50 -> true
                                 | _ -> false)
            |> Seq.toArray
 
 let rule = ruleNumber |> computeRule
-
 let arr = build size
 
-go arr rule iterations |> Seq.map (fun x -> x.Dump())
-                       |> Seq.toList
-                       |> ignore
+let results = go arr rule iterations
+let printable = String.Join(Environment.NewLine, results |> Seq.map toString)
+
+printable.Dump();

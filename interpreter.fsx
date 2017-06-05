@@ -19,15 +19,12 @@ ruleNumber.Dump();
 "".Dump();
 let iterations = size / 2
 
-let getElements (row:bool[]) =
-    let toTriplet index =
-        match index with
-        | 0                         -> (row.[0], row.[0], row.[1])
-        | x when x = row.Length - 1 -> (row.[x - 1], row.[x], row.[x])
-        | _                         -> (row.[index - 1], row.[index], row.[index + 1])
+let buildBoolArray n =
+    [0..n] |> Seq.map (fun idex -> match random.Next(0, 100) with
+                                   | x when x >= 10 -> true
+                                   | _ -> false)
+           |> Seq.toArray
 
-    [0..(row.Length - 1)] |> Seq.map toTriplet
-    
 let computeRule number =
     let hasBit num bit =
         num &&& (1 <<< bit) > 0
@@ -48,16 +45,24 @@ let toString row =
     String.Join("", strs)
     
 
-let go row (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
-    let interpret triplet =
-        ruleSet.Item(triplet)
+let go firstRow (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
+    let getTriplets (row:bool[]) =
+        let toTriplet index =
+            match index with
+            | 0                         -> (row.[0], row.[0], row.[1])
+            | x when x = row.Length - 1 -> (row.[x - 1], row.[x], row.[x])
+            | _                         -> (row.[index - 1], row.[index], row.[index + 1])
+    
+        [0..(row.Length - 1)] |> Seq.map (fun x -> async { return toTriplet(x) })
+                              |> Async.Parallel
+                              |> Async.RunSynchronously
 
     let rec goInternal row index =
         seq {
             yield row
             
-            let newRow = row |> getElements
-                             |> Seq.map (fun x -> async { return interpret x })
+            let newRow = row |> getTriplets
+                             |> Seq.map (fun x -> async { return ruleSet.Item(x) })
                              |> Async.Parallel
                              |> Async.RunSynchronously
                              |> Seq.toArray
@@ -67,18 +72,12 @@ let go row (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
             | _ -> yield! goInternal newRow (index - 1)
         }
         
-    goInternal row step
-
-let build n =
-    [0..n] |> Seq.map (fun x -> match random.Next(0, 100) with
-                                | x when x >= 50 -> true
-                                | _ -> false)
-           |> Seq.toArray
+    goInternal firstRow step
 
 let rule = ruleNumber |> computeRule
-let arr = build size
+let firstRow = buildBoolArray size
 
-let results = go arr rule iterations
+let results = go firstRow rule iterations
 let printable = String.Join(Environment.NewLine, results |> Seq.map toString)
 
 printable.Dump();

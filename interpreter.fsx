@@ -39,9 +39,7 @@ let toString row =
         | true -> "■"
         | _    -> " "
         
-    let strs = row |> Seq.map (fun x -> async { return convert x })
-                   |> Async.Parallel
-                   |> Async.RunSynchronously
+    let strs = row |> Seq.map convert
     String.Join("", strs)
     
 

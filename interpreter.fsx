@@ -53,9 +53,7 @@ let go firstRow (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
             | x when x = row.Length - 1 -> (row.[x - 1], row.[x], row.[x])
             | _                         -> (row.[index - 1], row.[index], row.[index + 1])
     
-        [0..(row.Length - 1)] |> Seq.map (fun x -> async { return toTriplet(x) })
-                              |> Async.Parallel
-                              |> Async.RunSynchronously
+        [0..(row.Length - 1)] |> Seq.map toTriplet
 
     let rec goInternal row index =
         seq {

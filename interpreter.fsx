@@ -62,9 +62,7 @@ let go firstRow (ruleSet:IDictionary<(bool * bool * bool), bool>) step =
             yield row
             
             let newRow = row |> getTriplets
-                             |> Seq.map (fun x -> async { return ruleSet.Item(x) })
-                             |> Async.Parallel
-                             |> Async.RunSynchronously
+                             |> Seq.map (fun x -> ruleSet.Item(x))
                              |> Seq.toArray
 
             match index with
